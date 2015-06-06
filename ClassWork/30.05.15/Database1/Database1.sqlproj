@@ -59,11 +59,13 @@
     <Folder Include="Properties" />
     <Folder Include="tabels" />
     <Folder Include="Reference Data" />
+    <Folder Include="Procedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="tabels\Games.sql" />
     <Build Include="tabels\Leagues.sql" />
     <Build Include="tabels\Teams.sql" />
+    <Build Include="Procedures\InitData.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Database1.refactorlog" />
