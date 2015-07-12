@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Database2Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Games">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Number" Type="int" Nullable="false" />
+          <Property Name="Team1" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Team2" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Result" Type="tinyint" Nullable="false" />
+          <Property Name="Team1BidPercent" Type="tinyint" />
+          <Property Name="Team2BidPercent" Type="tinyint" />
+          <Property Name="Date" Type="datetime2" Precision="0" />
+          <Property Name="League" Type="uniqueidentifier" />
+          <Property Name="IsFinished" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Leagues">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PictureUrl" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Teams">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Wins" Type="smallint" Nullable="false" />
+          <Property Name="Losses" Type="smallint" Nullable="false" />
+          <Property Name="Draws" Type="smallint" Nullable="false" />
+          <Property Name="PictureUrl" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_Games_To_Leagues">
+          <End Role="Leagues" Type="Self.Leagues" Multiplicity="0..1" />
+          <End Role="Games" Type="Self.Games" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Leagues">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Games">
+              <PropertyRef Name="League" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Games_To_Teams1">
+          <End Role="Teams" Type="Self.Teams" Multiplicity="1" />
+          <End Role="Games" Type="Self.Games" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teams">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Games">
+              <PropertyRef Name="Team1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Games_To_Teams2">
+          <End Role="Teams" Type="Self.Teams" Multiplicity="1" />
+          <End Role="Games" Type="Self.Games" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teams">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Games">
+              <PropertyRef Name="Team2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="InitData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="delete" Type="bit" Mode="In" />
+          <Parameter Name="deleted" Type="int" Mode="InOut" />
+        </Function>
+        <EntityContainer Name="Database2ModelStoreContainer">
+          <EntitySet Name="Games" EntityType="Self.Games" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Leagues" EntityType="Self.Leagues" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teams" EntityType="Self.Teams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Games_To_Leagues" Association="Self.FK_Games_To_Leagues">
+            <End Role="Leagues" EntitySet="Leagues" />
+            <End Role="Games" EntitySet="Games" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Games_To_Teams1" Association="Self.FK_Games_To_Teams1">
+            <End Role="Teams" EntitySet="Teams" />
+            <End Role="Games" EntitySet="Games" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Games_To_Teams2" Association="Self.FK_Games_To_Teams2">
+            <End Role="Teams" EntitySet="Teams" />
+            <End Role="Games" EntitySet="Games" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Database2Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
+          <Property Name="Team1" Type="Guid" Nullable="false" />
+          <Property Name="Team2" Type="Guid" Nullable="false" />
+          <Property Name="Result" Type="Byte" Nullable="false" />
+          <Property Name="Team1BidPercent" Type="Byte" />
+          <Property Name="Team2BidPercent" Type="Byte" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="League" Type="Guid" />
+          <Property Name="IsFinished" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="League1" Relationship="Self.FK_Games_To_Leagues" FromRole="Games" ToRole="Leagues" />
+          <NavigationProperty Name="Team" Relationship="Self.FK_Games_To_Teams1" FromRole="Games" ToRole="Teams" />
+          <NavigationProperty Name="Team3" Relationship="Self.FK_Games_To_Teams2" FromRole="Games" ToRole="Teams" />
+        </EntityType>
+        <EntityType Name="League">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PictureUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Games" Relationship="Self.FK_Games_To_Leagues" FromRole="Leagues" ToRole="Games" />
+        </EntityType>
+        <EntityType Name="Team">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Wins" Type="Int16" Nullable="false" />
+          <Property Name="Losses" Type="Int16" Nullable="false" />
+          <Property Name="Draws" Type="Int16" Nullable="false" />
+          <Property Name="PictureUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Games" Relationship="Self.FK_Games_To_Teams1" FromRole="Teams" ToRole="Games" />
+          <NavigationProperty Name="Games1" Relationship="Self.FK_Games_To_Teams2" FromRole="Teams" ToRole="Games" />
+        </EntityType>
+        <Association Name="FK_Games_To_Leagues">
+          <End Role="Leagues" Type="Self.League" Multiplicity="0..1" />
+          <End Role="Games" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Leagues">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Games">
+              <PropertyRef Name="League" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Games_To_Teams1">
+          <End Role="Teams" Type="Self.Team" Multiplicity="1" />
+          <End Role="Games" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teams">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Games">
+              <PropertyRef Name="Team1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Games_To_Teams2">
+          <End Role="Teams" Type="Self.Team" Multiplicity="1" />
+          <End Role="Games" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teams">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Games">
+              <PropertyRef Name="Team2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Database2Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Games" EntityType="Self.Game" />
+          <EntitySet Name="Leagues" EntityType="Self.League" />
+          <EntitySet Name="Teams" EntityType="Self.Team" />
+          <AssociationSet Name="FK_Games_To_Leagues" Association="Self.FK_Games_To_Leagues">
+            <End Role="Leagues" EntitySet="Leagues" />
+            <End Role="Games" EntitySet="Games" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Games_To_Teams1" Association="Self.FK_Games_To_Teams1">
+            <End Role="Teams" EntitySet="Teams" />
+            <End Role="Games" EntitySet="Games" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Games_To_Teams2" Association="Self.FK_Games_To_Teams2">
+            <End Role="Teams" EntitySet="Teams" />
+            <End Role="Games" EntitySet="Games" />
+          </AssociationSet>
+          <FunctionImport Name="InitData">
+            <Parameter Name="delete" Mode="In" Type="Boolean" />
+            <Parameter Name="deleted" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Database2ModelStoreContainer" CdmEntityContainer="Database2Entities">
+          <EntitySetMapping Name="Games">
+            <EntityTypeMapping TypeName="Database2Model.Game">
+              <MappingFragment StoreEntitySet="Games">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Team1" ColumnName="Team1" />
+                <ScalarProperty Name="Team2" ColumnName="Team2" />
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="Team1BidPercent" ColumnName="Team1BidPercent" />
+                <ScalarProperty Name="Team2BidPercent" ColumnName="Team2BidPercent" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="League" ColumnName="League" />
+                <ScalarProperty Name="IsFinished" ColumnName="IsFinished" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Leagues">
+            <EntityTypeMapping TypeName="Database2Model.League">
+              <MappingFragment StoreEntitySet="Leagues">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PictureUrl" ColumnName="PictureUrl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teams">
+            <EntityTypeMapping TypeName="Database2Model.Team">
+              <MappingFragment StoreEntitySet="Teams">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Wins" ColumnName="Wins" />
+                <ScalarProperty Name="Losses" ColumnName="Losses" />
+                <ScalarProperty Name="Draws" ColumnName="Draws" />
+                <ScalarProperty Name="PictureUrl" ColumnName="PictureUrl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="InitData" FunctionName="Database2Model.Store.InitData" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
