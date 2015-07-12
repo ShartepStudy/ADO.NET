@@ -28,6 +28,8 @@ namespace WpfApplication1
         {
             using (var db = new Database2Entities())
             {
+                var other_teams = db.Teams.Where(t => t.PictureUrl == "Some URL" && t.Name.EndsWith("A"));
+                db.Teams.Select(t => t.Id).FirstOrDefault(id => id == new Guid())
                 var teams = from team in db.Teams
                             where team.PictureUrl == "Some URL"
                             select new
@@ -35,7 +37,8 @@ namespace WpfApplication1
                                 Name = team.Name,
                                 URL = team.PictureUrl
                             };
-                this.DataContext = teams.ToList();
+//                this.DataContext = teams.ToList();
+                this.DataContext = other_teams.ToList();
             }
         }
     }

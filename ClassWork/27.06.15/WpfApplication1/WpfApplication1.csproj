@@ -76,6 +76,7 @@
     <Compile Include="League.cs">
       <DependentUpon>Database2Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Team.Additional.cs" />
     <Compile Include="Team.cs">
       <DependentUpon>Database2Model.tt</DependentUpon>
     </Compile>
